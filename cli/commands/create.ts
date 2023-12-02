@@ -1,4 +1,6 @@
 import { Command } from "commander"
+import { mkdir } from "fs/promises"
+import { existsSync } from "fs"
 import { DAY } from "../options/day.ts"
 import { Paths } from "../paths.ts"
 import { YEAR } from "../options/year.ts"
@@ -18,6 +20,10 @@ export const CREATE = new Command("create")
   .addOption(YEAR)
   .addOption(DAY.default(new Date().getDate()))
   .action(async ({ day, year }) => {
+    if (!existsSync(Paths.input(year))) {
+      await mkdir(Paths.input(year))
+    }
+
     const paths = Paths.day(year, day)
     const writes: Promise<number>[] = []
     const input = Bun.file(paths.input)
