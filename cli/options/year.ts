@@ -1,4 +1,4 @@
-ıimport { Option } from "commander"
+import { Option } from "commander"
 
 export const YEAR = new Option("-y, --year <year>", "Year")
   .argParser((value) => {
