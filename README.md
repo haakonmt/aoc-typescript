@@ -1,4 +1,9 @@
-# aoc-2023
+# aoc-typescript
+
+Make sure Bun is installed:
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
 
 Install dependencies:
 
