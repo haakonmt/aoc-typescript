@@ -1,9 +1,10 @@
 import { arr } from "../utils.ts"
 
 function getWinners(line: string) {
-  const [, winningCards, playerCards] = line
-    .match(/.*:\s+([\d\s]+)\s+\|\s+([\d\s]+)\s*/)!
-    .map((i) => i.split(/\s+/))
+  const [, c] = line.split(":")
+  const [winningCards, playerCards] = c
+    .split("|")
+    .map((i) => i.split(/\s+/).filter(Boolean))
 
   return arr.intersect(winningCards, playerCards)
 }
@@ -17,17 +18,16 @@ export default {
     }, 0)
   },
   part2({ lines }) {
-    const cache: Record<number, number> = {}
+    const cache: number[] = []
 
     for (let i = 0; i < lines.length; i += 1) {
       cache[i] ??= 1
 
       const winners = getWinners(lines[i])
 
-      for (let j = 0; j < winners.length; j += 1) {
-        const key = i + j + 1
-        cache[key] ??= 1
-        cache[key] += cache[i]
+      for (let j = i + 1; j < i + winners.length + 1; j += 1) {
+        cache[j] ??= 1
+        cache[j] += cache[i]
       }
     }
 
