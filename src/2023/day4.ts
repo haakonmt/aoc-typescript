@@ -31,6 +31,6 @@ export default {
       }
     }
 
-    return arr.sum(Object.values(cache))
+    return arr.sum(cache)
   },
 } satisfies Day
