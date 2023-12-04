@@ -1,3 +1,5 @@
+import { arr } from "../utils.ts"
+
 interface MatchesParams {
   regex: RegExp
   text: string
@@ -65,7 +67,7 @@ function solve({
       },
     })
 
-    return sum + weights.reduce((acc, weight) => acc + weight, 0)
+    return sum + arr.sum(weights)
   }, 0)
 }
 
@@ -87,9 +89,7 @@ export default {
       self: gears,
       adjacent: digits,
       calculateAdjacentWeights(matches) {
-        return matches.length === 2
-          ? matches.reduce((acc, match) => acc * match, 1)
-          : 0
+        return matches.length === 2 ? arr.product(matches) : 0
       },
     })
   },

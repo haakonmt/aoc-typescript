@@ -1,3 +1,5 @@
+import { arr } from "../utils.ts"
+
 const limits: Record<string, number> = {
   red: 12,
   green: 13,
@@ -38,9 +40,7 @@ export default {
         },
       )
 
-      return (
-        sum + Object.values(maximums).reduce((acc, value) => acc * value, 1)
-      )
+      return sum + arr.product(Object.values(maximums))
     }, 0)
   },
 } satisfies Day

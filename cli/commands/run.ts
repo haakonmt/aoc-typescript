@@ -3,6 +3,7 @@ import { readdir } from "node:fs/promises"
 import { DAY } from "../options/day.ts"
 import { Paths } from "../paths.ts"
 import { YEAR } from "../options/year.ts"
+import { time } from "../../src/utils.ts"
 
 export const RUN = new Command("run")
   .addOption(YEAR)
@@ -36,8 +37,8 @@ async function executeDay(day: number, year: number) {
   const lines = input.split("\n").filter((it) => !!it.trim())
 
   const [part1, part2] = await Promise.allSettled([
-    code.part1({ raw: input, lines }),
-    code.part2({ raw: input, lines }),
+    time(() => code.part1({ raw: input, lines })),
+    time(() => code.part2({ raw: input, lines })),
   ])
 
   console.log({

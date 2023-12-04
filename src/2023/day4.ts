@@ -1,9 +1,11 @@
+import { arr } from "../utils.ts"
+
 function getWinners(line: string) {
   const [, winningCards, playerCards] = line
     .match(/.*:\s+([\d\s]+)\s+\|\s+([\d\s]+)\s*/)!
     .map((i) => i.split(/\s+/))
 
-  return playerCards.filter((it) => winningCards.includes(it))
+  return arr.intersect(winningCards, playerCards)
 }
 
 export default {
@@ -29,6 +31,6 @@ export default {
       }
     }
 
-    return Object.values(cache).reduce((acc, curr) => acc + curr, 0)
+    return arr.sum(Object.values(cache))
   },
 } satisfies Day

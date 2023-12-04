@@ -1,6 +1,6 @@
 import { Command } from "commander"
-import { mkdir } from "fs/promises"
-import { existsSync } from "fs"
+import { exists, mkdir } from "fs/promises"
+import { execSync } from "child_process"
 import { DAY } from "../options/day.ts"
 import { Paths } from "../paths.ts"
 import { YEAR } from "../options/year.ts"
@@ -16,13 +16,20 @@ export default {
 } satisfies Day
 `.trimStart()
 
+async function createIfNotExists(path: string) {
+  if (!(await exists(path))) {
+    await mkdir(path)
+  }
+}
+
 export const CREATE = new Command("create")
   .addOption(YEAR)
   .addOption(DAY.default(new Date().getDate()))
   .action(async ({ day, year }) => {
-    if (!existsSync(Paths.input(year))) {
-      await mkdir(Paths.input(year))
-    }
+    await Promise.all([
+      createIfNotExists(Paths.input(year)),
+      createIfNotExists(Paths.src(year)),
+    ])
 
     const paths = Paths.day(year, day)
     const writes: Promise<number>[] = []
@@ -49,4 +56,6 @@ export const CREATE = new Command("create")
     }
 
     await Promise.all(writes)
+
+    execSync(`git add ${paths.src}`)
   })
