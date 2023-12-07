@@ -8,9 +8,10 @@ import { time } from "../../src/utils.ts"
 export const RUN = new Command("run")
   .addOption(YEAR)
   .addOption(DAY)
+  .option("-e, --example", "Run example input")
   .action(async (options) => {
     if (options.day) {
-      await executeDay(options.day, options.year)
+      await executeDay(options.day, options.year, options.example)
     } else {
       const days = await readdir(Paths.src(options.year))
       await Promise.allSettled(
@@ -19,17 +20,17 @@ export const RUN = new Command("run")
             const day = parseInt(curr.match(/day(\d+)\.ts/)?.[1] ?? "", 10)
             return Number.isNaN(day) ? acc : [...acc, day]
           }, [])
-          .map((day) => executeDay(day, options.year)),
+          .map((day) => executeDay(day, options.year, options.example)),
       )
     }
   })
 
-async function executeDay(day: number, year: number) {
+async function executeDay(day: number, year: number, example: boolean) {
   const paths = Paths.day(year, day)
 
   const [module, input] = await Promise.all([
     import(paths.src),
-    Bun.file(paths.input).text(),
+    Bun.file(example ? paths.example : paths.input).text(),
   ])
 
   const code: Day = module.default
@@ -42,6 +43,7 @@ async function executeDay(day: number, year: number) {
   ])
 
   console.log({
+    example,
     day,
     part1,
     part2,

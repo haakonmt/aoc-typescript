@@ -9,9 +9,13 @@ export class Paths {
 
   static day(year: number, day: number) {
     return {
-      input: `${this.input(year)}/day${day}.txt`,
+      input: `${this.input(year)}/day${day}-input.txt`,
       src: `${this.src(year)}/day${day}.ts`,
-      url: `https://adventofcode.com/${year}/day/${day}/input`,
+      example: `${this.input(year)}/day${day}-example.txt`,
+      urls: {
+        task: `https://adventofcode.com/${year}/day/${day}`,
+        input: `https://adventofcode.com/${year}/day/${day}/input`,
+      },
     }
   }
 }

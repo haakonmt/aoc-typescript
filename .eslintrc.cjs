@@ -26,5 +26,6 @@ module.exports = {
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "import/extensions": "off",
+    "no-restricted-syntax": ["off", "ForOfStatement"],
   }
 };
