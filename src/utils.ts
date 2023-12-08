@@ -18,3 +18,15 @@ export const arr = {
     return a.reduce<number>((acc, curr) => acc * Number(curr), 1)
   },
 }
+
+export const num = {
+  gcd(a: number, b: number): number {
+    if (b === 0) {
+      return a
+    }
+    return num.gcd(b, a % b)
+  },
+  lcm(a: number, b: number): number {
+    return (a * b) / num.gcd(a, b)
+  },
+}
