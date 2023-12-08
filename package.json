@@ -11,6 +11,7 @@
     "semi": false
   },
   "dependencies": {
+    "bun-promptx": "^0.2.0",
     "cheerio": "^1.0.0-rc.12",
     "commander": "^11.1.0"
   },

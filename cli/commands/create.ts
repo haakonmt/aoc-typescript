@@ -1,7 +1,8 @@
 import { Command } from "commander"
 import { exists, mkdir } from "fs/promises"
 import { execSync } from "child_process"
-import { load } from "cheerio"
+import { Element, load } from "cheerio"
+import { createSelection, SelectionItem } from "bun-promptx"
 import { DAY } from "../options/day.ts"
 import { Paths } from "../paths.ts"
 import { YEAR } from "../options/year.ts"
@@ -47,21 +48,46 @@ export const CREATE = new Command("create")
       }
 
       const res = await fetch(paths.urls.task)
-      const text = await res.text()
-      const $ = load(text)
+      const $ = load(await res.text())
       const code = $("pre > code").filter((_, el) => {
         const p = $(el).parent().prev().first()
         return p.is("p") && p.text().toLowerCase().includes("for example")
       })
 
       let snippet: string
-      if (code.length !== 1) {
-        console.warn(
-          `Unable to find example on page, go to ${paths.urls.task} and locate it yourself, before pasting it into ${paths.example}`,
-        )
-        snippet = ""
-      } else {
-        snippet = code.first().text().trim()
+      switch (code.length) {
+        case 0:
+          snippet = ""
+          console.warn(
+            `Unable to find example on page, go to ${paths.urls.task} and locate it yourself, before pasting it into ${paths.example}`,
+          )
+          break
+        case 1:
+          snippet = code.first().text().trim()
+          break
+        default: {
+          const choices: (SelectionItem & { element: Element })[] = []
+
+          code.each((_, element) => {
+            const text = $(element).parent().prev().first().text()
+            choices.push({
+              text,
+              element,
+            })
+          })
+
+          const result = createSelection(choices, {
+            headerText: "Found multiple code examples, please select one:",
+            perPage: 5,
+          })
+
+          if (typeof result.selectedIndex !== "number") {
+            throw new Error("You have to choose an example")
+          }
+
+          snippet = $(choices[result.selectedIndex].element).text().trim()
+          break
+        }
       }
 
       return Bun.write(Bun.file(paths.example), snippet)
