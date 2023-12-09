@@ -14,6 +14,9 @@ export const arr = {
   sum(a: (string | number)[]) {
     return a.reduce<number>((acc, curr) => acc + Number(curr), 0)
   },
+  sumBy<T>(a: T[], fn: (it: T) => number) {
+    return a.reduce<number>((acc, curr) => acc + fn(curr), 0)
+  },
   product(a: (string | number)[]) {
     return a.reduce<number>((acc, curr) => acc * Number(curr), 1)
   },
