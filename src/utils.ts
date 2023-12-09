@@ -20,6 +20,11 @@ export const arr = {
   product(a: (string | number)[]) {
     return a.reduce<number>((acc, curr) => acc * Number(curr), 1)
   },
+  chunk<T>(a: T[], size: number): T[][] {
+    return Array.from({ length: Math.ceil(a.length / size) }, (_, i) =>
+      a.slice(i * size, i * size + size),
+    )
+  },
 }
 
 export const num = {
