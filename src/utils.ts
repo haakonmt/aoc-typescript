@@ -37,4 +37,13 @@ export const num = {
   lcm(a: number, b: number): number {
     return (a * b) / num.gcd(a, b)
   },
+  inRange(a: number, b: number) {
+    return (n: number) => n > Math.min(a, b) && n < Math.max(a, b)
+  },
+}
+
+export const grid = {
+  manhattanDistance(a: Cell, b: Cell) {
+    return Math.abs(b.x - a.x) + Math.abs(b.y - a.y)
+  },
 }
