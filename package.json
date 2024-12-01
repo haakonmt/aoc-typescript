@@ -13,9 +13,11 @@
   "dependencies": {
     "bun-promptx": "^0.2.0",
     "cheerio": "^1.0.0-rc.12",
-    "commander": "^11.1.0"
+    "commander": "^11.1.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.13",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "bun-types": "latest",
