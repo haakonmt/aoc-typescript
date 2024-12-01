@@ -1,10 +1,10 @@
-import { arr } from "../utils.ts"
+import { arr } from '../utils.ts'
 
 interface MatchesParams {
   regex: RegExp
   text: string
   range?: [number, number]
-  calculateWeight?(match: RegExpExecArray, selfWeight: number): number
+  calculateWeight?: (match: RegExpExecArray, selfWeight: number) => number
 }
 
 function matchAll({
@@ -19,7 +19,7 @@ function matchAll({
     const [start, end] = match.indices!.groups!.value!
 
     if (min < end && max >= start) {
-      const value = parseInt(match[1], 10)
+      const value = Number.parseInt(match[1], 10)
       const selfWeight = Number.isNaN(value) ? 0 : value
       matches.push(calculateWeight?.(match, selfWeight) ?? selfWeight)
     }
@@ -34,7 +34,7 @@ interface SolveParams {
   self: RegExp
   adjacent: RegExp
 
-  calculateAdjacentWeights?(matches: number[]): number
+  calculateAdjacentWeights?: (matches: number[]) => number
 }
 
 function solve({
@@ -52,7 +52,7 @@ function solve({
         const adjacents = [-1, 0, 1].flatMap((offset) =>
           matchAll({
             regex: adjacent,
-            text: lines[i + offset] ?? "",
+            text: lines[i + offset] ?? '',
             // Only include matches in the same index range as the self match
             range: [match.index - 1, self.lastIndex],
           }),

@@ -1,9 +1,9 @@
-import { num } from "../utils.ts"
+import { num } from '../utils.ts'
 
 const lineRegex = /^(?<name>\w+) = \((?<L>\w+), (?<R>\w+)\)$/
 
 function createNodes([instructions, ...lines]: string[]) {
-  const nodes: Record<string, { name: string; L: string; R: string }> = {}
+  const nodes: Record<string, { name: string, L: string, R: string }> = {}
 
   for (const line of lines) {
     const { name, L, R } = lineRegex.exec(line)?.groups ?? {}
@@ -14,7 +14,7 @@ function createNodes([instructions, ...lines]: string[]) {
     const i = state.steps % instructions.length
     const steps = state.steps + 1
 
-    const dir = instructions[i] as "L" | "R"
+    const dir = instructions[i] as 'L' | 'R'
     const node = nodes[state.node][dir]
 
     return {
@@ -27,7 +27,7 @@ function createNodes([instructions, ...lines]: string[]) {
   return { nodes, next }
 }
 
-type State = {
+interface State {
   node: string
   i: number
   steps: number
@@ -37,9 +37,9 @@ export default {
   part1({ lines }) {
     const { next } = createNodes(lines)
 
-    let state: State = { node: "AAA", i: 0, steps: 0 }
+    let state: State = { node: 'AAA', i: 0, steps: 0 }
 
-    while (state.node !== "ZZZ") {
+    while (state.node !== 'ZZZ') {
       state = next(state)
     }
 
@@ -48,7 +48,7 @@ export default {
   part2({ lines }) {
     const { nodes, next } = createNodes(lines)
 
-    const starts = Object.keys(nodes).filter((it) => it.endsWith("A"))
+    const starts = Object.keys(nodes).filter((it) => it.endsWith('A'))
 
     let lcms = [1]
     for (const node of starts) {
@@ -62,7 +62,7 @@ export default {
 
         state = next(state)
 
-        if (state.node.endsWith("Z")) {
+        if (state.node.endsWith('Z')) {
           ends.push(state.steps)
         }
       }

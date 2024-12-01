@@ -1,4 +1,4 @@
-import { unzip } from "lodash"
+import { unzip } from 'lodash'
 
 function merge(lines: string[]) {
   return unzip(lines.map((it) => it.split(/\s+/g).map(Number)))

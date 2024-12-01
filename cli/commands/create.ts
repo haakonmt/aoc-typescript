@@ -1,11 +1,13 @@
-import { Command } from "commander"
-import { exists, mkdir } from "fs/promises"
-import { execSync } from "child_process"
-import { Element, load } from "cheerio"
-import { createSelection, SelectionItem } from "bun-promptx"
-import { DAY } from "../options/day.ts"
-import { Paths } from "../paths.ts"
-import { YEAR } from "../options/year.ts"
+import type { SelectionItem } from 'bun-promptx'
+import type { Element } from 'domhandler'
+import { execSync } from 'node:child_process'
+import { exists, mkdir } from 'node:fs/promises'
+import { createSelection } from 'bun-promptx'
+import { load } from 'cheerio'
+import { Command } from 'commander'
+import { DAY } from '../options/day.ts'
+import { YEAR } from '../options/year.ts'
+import { Paths } from '../paths.ts'
 
 const TEMPLATE = `
 export default {
@@ -24,7 +26,7 @@ async function createIfNotExists(path: string) {
   }
 }
 
-export const CREATE = new Command("create")
+export const CREATE = new Command('create')
   .addOption(YEAR)
   .addOption(DAY.default(new Date().getDate()))
   .action(async ({ day, year }) => {
@@ -49,15 +51,15 @@ export const CREATE = new Command("create")
 
       const res = await fetch(paths.urls.task)
       const $ = load(await res.text())
-      const code = $("pre > code").filter((_, el) => {
+      const code = $('pre > code').filter((_, el) => {
         const p = $(el).parent().prev().first()
-        return p.is("p") && p.text().toLowerCase().includes("for example")
+        return p.is('p') && p.text().toLowerCase().includes('for example')
       })
 
       let snippet: string
       switch (code.length) {
         case 0:
-          snippet = ""
+          snippet = ''
           console.warn(
             `Unable to find example on page, go to ${paths.urls.task} and locate it yourself, before pasting it into ${paths.example}`,
           )
@@ -77,12 +79,12 @@ export const CREATE = new Command("create")
           })
 
           const result = createSelection(choices, {
-            headerText: "Found multiple code examples, please select one:",
+            headerText: 'Found multiple code examples, please select one:',
             perPage: 5,
           })
 
-          if (typeof result.selectedIndex !== "number") {
-            throw new Error("You have to choose an example")
+          if (typeof result.selectedIndex !== 'number') {
+            throw new TypeError('You have to choose an example')
           }
 
           snippet = $(choices[result.selectedIndex].element).text().trim()
@@ -101,10 +103,10 @@ export const CREATE = new Command("create")
         return 0
       }
 
-      const token = process.env.SESSION_TOKEN
+      const token = import.meta.env.SESSION_TOKEN
       if (!token) {
         console.warn(
-          "Missing SESSION_TOKEN env variable. No input data will be fetched.",
+          'Missing SESSION_TOKEN env variable. No input data will be fetched.',
         )
         return 0
       }
@@ -115,7 +117,6 @@ export const CREATE = new Command("create")
         },
       })
 
-      // @ts-expect-error No idea why this fails
       return Bun.write(Bun.file(paths.input), res)
     }
 

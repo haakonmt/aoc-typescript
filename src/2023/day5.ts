@@ -1,6 +1,6 @@
-import { arr } from "../utils.ts"
+import { arr } from '../utils.ts'
 
-type Range = {
+interface Range {
   src: number
   dest: number
   length: number
@@ -8,12 +8,12 @@ type Range = {
 
 function parseInput([seedLine, ...lines]: string[]) {
   const [, seeds] = seedLine
-    .split(":")
+    .split(':')
     .map((it) => it.trim().split(/\s+/).map(Number))
 
   const ranges: Range[][] = []
   for (const line of lines) {
-    if (line.includes("map")) {
+    if (line.includes('map')) {
       ranges.push([])
     } else if (line.trim()) {
       const [destRangeStart, srcRangeStart, rangeLength] = line

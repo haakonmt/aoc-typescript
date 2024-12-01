@@ -1,9 +1,9 @@
-import { arr } from "../utils.ts"
+import { arr } from '../utils.ts'
 
 function getWinners(line: string) {
-  const [, c] = line.split(":")
+  const [, c] = line.split(':')
   const [winningCards, playerCards] = c
-    .split("|")
+    .split('|')
     .map((i) => i.split(/\s+/).filter(Boolean))
 
   return arr.intersect(winningCards, playerCards)

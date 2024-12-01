@@ -1,4 +1,4 @@
-import { arr } from "../utils.ts"
+import { arr } from '../utils.ts'
 
 const limits: Record<string, number> = {
   red: 12,
@@ -9,7 +9,7 @@ const limits: Record<string, number> = {
 const regex = /(\d+) (green|blue|red)/g
 
 function isInsideLimit([, value, color]: RegExpMatchArray) {
-  return parseInt(value, 10) <= limits[color]
+  return Number.parseInt(value, 10) <= limits[color]
 }
 
 export default {
@@ -27,7 +27,7 @@ export default {
       const maximums = matches.reduce<Record<string, number>>(
         (acc, [, value, color]) => {
           const max = acc[color]
-          const numVal = parseInt(value, 10)
+          const numVal = Number.parseInt(value, 10)
           return {
             ...acc,
             [color]: numVal > max ? numVal : max,

@@ -1,9 +1,14 @@
 {
   "name": "aoc-typescript",
-  "module": "index.ts",
   "type": "module",
+  "module": "index.ts",
   "scripts": {
-    "aoc": "bun run index.ts"
+    "aoc": "bun run index.ts",
+    "lint": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "bun-promptx": "^0.2.0",
@@ -12,10 +17,10 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^3.11.2",
     "@types/lodash": "^4.17.13",
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.7.2"
+    "bun-types": "latest",
+    "eslint": "^9.15.0",
+    "eslint-plugin-format": "^0.1.2"
   }
 }

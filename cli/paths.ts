@@ -1,3 +1,5 @@
+import process from 'node:process'
+
 export class Paths {
   static input(year: number) {
     return `${process.cwd()}/input/${year}`

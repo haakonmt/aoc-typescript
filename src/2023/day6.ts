@@ -29,7 +29,7 @@ export default {
   part1({ lines }) {
     const [time, distance] = lines.map((it) =>
       it
-        .split(":")
+        .split(':')
         .slice(1)
         .flatMap((s) => s.split(/\s+/).map(Number)),
     )
@@ -39,9 +39,9 @@ export default {
   part2({ lines }) {
     const [time, distance] = lines.map((it) =>
       it
-        .split(":")
+        .split(':')
         .slice(1)
-        .map((s) => Number(s.replaceAll(/\s+/g, ""))),
+        .map((s) => Number(s.replaceAll(/\s+/g, ''))),
     )
 
     return solve(time, distance)

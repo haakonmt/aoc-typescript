@@ -1,4 +1,4 @@
-import { arr } from "../utils.ts"
+import { arr } from '../utils.ts'
 
 function buildHistory(line: string) {
   const original = line.split(/\s+/).map(Number)

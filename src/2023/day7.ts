@@ -1,11 +1,11 @@
 const ORDERED_TYPES = [
-  "high-card",
-  "one-pair",
-  "two-pairs",
-  "three-of-a-kind",
-  "full-house",
-  "four-of-a-kind",
-  "five-of-a-kind",
+  'high-card',
+  'one-pair',
+  'two-pairs',
+  'three-of-a-kind',
+  'full-house',
+  'four-of-a-kind',
+  'five-of-a-kind',
 ] as const
 
 type CardType = (typeof ORDERED_TYPES)[number]
@@ -13,7 +13,7 @@ type CardType = (typeof ORDERED_TYPES)[number]
 interface SolveParams {
   lines: string[]
   jWeight: number
-  getType(cardCounts: Record<string, number>): CardType
+  getType: (cardCounts: Record<string, number>) => CardType
 }
 
 function solve({ lines, jWeight, getType }: SolveParams) {
@@ -26,7 +26,7 @@ function solve({ lines, jWeight, getType }: SolveParams) {
   }
 
   const hands = lines.map((line) => {
-    const [hand, bid] = line.split(" ")
+    const [hand, bid] = line.split(' ')
     const counts: Record<string, number> = {}
     const order: number[] = []
 
@@ -68,15 +68,15 @@ export default {
         const values = Object.values(cardCounts)
         switch (values.length) {
           case 1:
-            return "five-of-a-kind"
+            return 'five-of-a-kind'
           case 2:
-            return values.includes(4) ? "four-of-a-kind" : "full-house"
+            return values.includes(4) ? 'four-of-a-kind' : 'full-house'
           case 3:
-            return values.includes(3) ? "three-of-a-kind" : "two-pairs"
+            return values.includes(3) ? 'three-of-a-kind' : 'two-pairs'
           case 4:
-            return "one-pair"
+            return 'one-pair'
           default:
-            return "high-card"
+            return 'high-card'
         }
       },
     })
@@ -89,26 +89,26 @@ export default {
         const values = Object.values(cards)
 
         if (values.length <= 1) {
-          return "five-of-a-kind"
+          return 'five-of-a-kind'
         }
 
         if (values.some((it) => it + jokerCount === 4)) {
-          return "four-of-a-kind"
+          return 'four-of-a-kind'
         }
 
         if (values.some((it) => it + jokerCount === 3)) {
-          return values.length === 2 ? "full-house" : "three-of-a-kind"
+          return values.length === 2 ? 'full-house' : 'three-of-a-kind'
         }
 
         if (values.length < 4) {
-          return "two-pairs"
+          return 'two-pairs'
         }
 
         if (values.length === 4) {
-          return "one-pair"
+          return 'one-pair'
         }
 
-        return "high-card"
+        return 'high-card'
       },
     })
   },

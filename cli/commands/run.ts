@@ -1,14 +1,14 @@
-import { Command } from "commander"
-import { readdir } from "node:fs/promises"
-import { DAY } from "../options/day.ts"
-import { Paths } from "../paths.ts"
-import { YEAR } from "../options/year.ts"
-import { time } from "../../src/utils.ts"
+import { readdir } from 'node:fs/promises'
+import { Command } from 'commander'
+import { time } from '../../src/utils.ts'
+import { DAY } from '../options/day.ts'
+import { YEAR } from '../options/year.ts'
+import { Paths } from '../paths.ts'
 
-export const RUN = new Command("run")
+export const RUN = new Command('run')
   .addOption(YEAR)
   .addOption(DAY)
-  .option("-e, --example", "Run example input")
+  .option('-e, --example', 'Run example input')
   .action(async (options) => {
     if (options.day) {
       await executeDay(options.day, options.year, options.example)
@@ -17,7 +17,7 @@ export const RUN = new Command("run")
       await Promise.allSettled(
         days
           .reduce<number[]>((acc, curr) => {
-            const day = parseInt(curr.match(/day(\d+)\.ts/)?.[1] ?? "", 10)
+            const day = Number.parseInt(curr.match(/day(\d+)\.ts/)?.[1] ?? '', 10)
             return Number.isNaN(day) ? acc : [...acc, day]
           }, [])
           .map((day) => executeDay(day, options.year, options.example)),
@@ -35,7 +35,7 @@ async function executeDay(day: number, year: number, example: boolean) {
 
   const code: Day = module.default
 
-  const lines = input.split("\n").filter((it) => !!it.trim())
+  const lines = input.split('\n').filter((it) => !!it.trim())
 
   const [part1, part2] = await Promise.allSettled([
     time(() => code.part1({ raw: input, lines })),

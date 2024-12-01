@@ -1,4 +1,4 @@
-import { arr, grid, num } from "../utils.ts"
+import { arr, grid, num } from '../utils.ts'
 
 function parseInput(lines: string[]) {
   const cells: Cell[] = []
@@ -12,7 +12,7 @@ function parseInput(lines: string[]) {
     }
 
     for (let x = 0; x < line.length; x += 1) {
-      if (line[x] === "#") {
+      if (line[x] === '#') {
         cells.push({ x, y })
         columns[x] = 0
       } else {

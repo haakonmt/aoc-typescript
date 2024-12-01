@@ -22,8 +22,7 @@ export const arr = {
   },
   chunk<T>(a: T[], size: number): T[][] {
     return Array.from({ length: Math.ceil(a.length / size) }, (_, i) =>
-      a.slice(i * size, i * size + size),
-    )
+      a.slice(i * size, i * size + size))
   },
 }
 
