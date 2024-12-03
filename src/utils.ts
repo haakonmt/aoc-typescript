@@ -24,6 +24,13 @@ export const arr = {
     return Array.from({ length: Math.ceil(a.length / size) }, (_, i) =>
       a.slice(i * size, i * size + size))
   },
+  windowed<T>(a: T[], size: number): T[][] {
+    return Array.from({ length: a.length - size + 1 }, (_, i) =>
+      a.slice(i, i + size))
+  },
+  withoutItemAtIndex<T>(a: T[], index: number): T[] {
+    return a.filter((_, i) => i !== index)
+  },
 }
 
 export const num = {
@@ -44,5 +51,11 @@ export const num = {
 export const grid = {
   manhattanDistance(a: Cell, b: Cell) {
     return Math.abs(b.x - a.x) + Math.abs(b.y - a.y)
+  },
+}
+
+export const bits = {
+  flip(v: number) {
+    return ~v & (2 ** v.toString(2).length - 1)
   },
 }
