@@ -48,12 +48,16 @@ export const num = {
   },
 }
 
-type Grid = string[][]
+export type Grid<T> = T[][]
+
+function createGrid<T>(lines: string[], createCell: (x: number, y: number, char: string) => T): Grid<T>
+function createGrid(lines: string[]): Grid<string>
+function createGrid<T>(lines: string[], createCell?: (x: number, y: number, char: string) => T): Grid<T | string> {
+  return lines.map((line, y) => line.split('').map((char, x) => createCell?.(x, y, char) ?? char))
+}
 
 export const grid = {
-  create(lines: string[]): Grid {
-    return lines.map((line) => line.split(''))
-  },
+  create: createGrid,
   manhattanDistance(a: Cell, b: Cell) {
     return Math.abs(b.x - a.x) + Math.abs(b.y - a.y)
   },
@@ -79,7 +83,7 @@ const DIRECTIONS = [
 ] as const satisfies Direction[]
 
 export const algorithms = {
-  countWordOccurrences(grid: Grid, word: string): number {
+  countWordOccurrences(grid: Grid<string>, word: string): number {
     const rows = grid.length
     const cols = grid[0].length
     let count = 0
@@ -114,7 +118,7 @@ export const algorithms = {
 
     return count
   },
-  countXPatterns(grid: Grid, chars: [start: string, center: string, end: string]) {
+  countXPatterns(grid: Grid<string>, chars: [start: string, center: string, end: string]) {
     const [start, center, end] = chars
 
     function isXPattern(y: number, x: number): boolean {
