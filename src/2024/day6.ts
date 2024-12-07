@@ -1,4 +1,4 @@
-import { grid, type Grid } from '../utils.ts'
+import { arr, grid, type Grid } from '../utils.ts'
 
 interface Cell {
   x: number
@@ -34,29 +34,55 @@ export default {
       char,
     }))
 
-    let { pos, dir } = getStartingPosition(rows)
-
-    function move() {
-      const next = rows[pos.y + dir.dy]?.[pos.x + dir.dx]
-
-      if (next?.char === '#') {
-        dir = dirs[dir.right]
-        return move()
-      }
-
-      return next
-    }
-
-    const visited = new Set<Cell>()
-
-    while (pos) {
-      visited.add(pos)
-      pos = move()
-    }
-
-    return visited.size
+    return run(rows)
   },
   part2({ lines }) {
-    return lines.length
+    const rows = grid.create<Cell>(lines, (x, y, char) => ({
+      x,
+      y,
+      char,
+    }))
+
+    return arr.sumBy(
+      rows.flat().filter((cell) => cell.char !== '#' && !(cell.char in dirs)),
+      (cell) => {
+        try {
+          run(rows, cell)
+          return 0
+        } catch {
+          return 1
+        }
+      },
+    )
   },
 } satisfies Day
+
+function run(grid: Grid<Cell>, obstacle?: Cell) {
+  let { pos, dir } = getStartingPosition(grid)
+
+  function move() {
+    const next = grid[pos.y + dir.dy]?.[pos.x + dir.dx]
+
+    if (next?.char === '#' || (!!obstacle && next === obstacle)) {
+      dir = dirs[dir.right]
+      return move()
+    }
+
+    return next
+  }
+
+  const visited = new Set<Cell>()
+  const dirMap = new Map<Cell, Array<typeof dir>>()
+
+  while (pos) {
+    const visitedDirs = dirMap.get(pos) ?? []
+    if (visitedDirs.includes(dir)) {
+      throw new Error('Loop detected')
+    }
+    dirMap.set(pos, [...visitedDirs, dir])
+    visited.add(pos)
+    pos = move()
+  }
+
+  return visited.size
+}
