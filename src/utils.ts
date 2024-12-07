@@ -143,3 +143,24 @@ export const algorithms = {
     return count
   },
 }
+
+export type Operator = '+' | '-' | '*' | '/' | '||'
+
+export const math = {
+  calc(a: number, b: number, op: Operator): number | null {
+    switch (op) {
+      case '+':
+        return a + b
+      case '-':
+        return a - b
+      case '*':
+        return a * b
+      case '/':
+        return b !== 0 ? a / b : null // Avoid division by zero
+      case '||':
+        return Number(String(a) + String(b))
+      default:
+        throw new Error(`Invalid operator: ${op}`)
+    }
+  },
+}

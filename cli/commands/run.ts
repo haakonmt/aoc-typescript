@@ -25,7 +25,7 @@ export const RUN = new Command('run')
     }
   })
 
-async function executeDay(day: number, year: number, example: boolean) {
+async function executeDay(day: number, year: number, example = false) {
   const paths = Paths.day(year, day)
 
   const [module, input] = await Promise.all([
