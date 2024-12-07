@@ -6,11 +6,19 @@ interface Cell {
   char: string
 }
 
+const dirs = {
+  '^': { dx: 0, dy: -1, right: '>' },
+  'v': { dx: 0, dy: 1, right: '<' },
+  '<': { dx: -1, dy: 0, right: '^' },
+  '>': { dx: 1, dy: 0, right: 'v' },
+} as const
+
 function getStartingPosition(grid: Grid<Cell>) {
   for (const row of grid) {
     for (const cell of row) {
-      if (['^', 'v', '<', '>'].includes(cell.char)) {
-        return cell
+      const dir = dirs[cell.char as keyof typeof dirs]
+      if (dir) {
+        return { pos: cell, dir }
       }
     }
   }
@@ -26,77 +34,24 @@ export default {
       char,
     }))
 
-    let pos = getStartingPosition(rows)
-
-    let dir: 'up' | 'down' | 'left' | 'right'
-    switch (pos.char) {
-      case '^':
-        dir = 'up'
-        break
-      case 'v':
-        dir = 'down'
-        break
-      case '<':
-        dir = 'left'
-        break
-      case '>':
-        dir = 'right'
-        break
-      default:
-        throw new Error('Invalid starting position')
-    }
-
-    function turnRight() {
-      switch (dir) {
-        case 'up':
-          dir = 'right'
-          break
-        case 'down':
-          dir = 'left'
-          break
-        case 'left':
-          dir = 'up'
-          break
-        case 'right':
-          dir = 'down'
-          break
-      }
-    }
+    let { pos, dir } = getStartingPosition(rows)
 
     function move() {
-      let next: Cell
-      switch (dir) {
-        case 'up': {
-          next = rows[pos.y - 1]?.[pos.x]
-          break
-        }
-        case 'down': {
-          next = rows[pos.y + 1]?.[pos.x]
-          break
-        }
-        case 'left': {
-          next = rows[pos.y]?.[pos.x - 1]
-          break
-        }
-        case 'right': {
-          next = rows[pos.y]?.[pos.x + 1]
-          break
-        }
-      }
+      const next = rows[pos.y + dir.dy]?.[pos.x + dir.dx]
 
       if (next?.char === '#') {
-        turnRight()
+        dir = dirs[dir.right]
         return move()
       }
 
-      pos = next
+      return next
     }
 
     const visited = new Set<Cell>()
 
     while (pos) {
       visited.add(pos)
-      move()
+      pos = move()
     }
 
     return visited.size
