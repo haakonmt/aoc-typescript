@@ -14,7 +14,8 @@
     "bun-promptx": "^0.2.0",
     "cheerio": "^1.0.0",
     "commander": "^12.1.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.11.2",
