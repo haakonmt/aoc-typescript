@@ -21,14 +21,21 @@ function prepare(lines: string[]) {
   return {
     antennas,
     grid,
-    antinodeCount: () => antinodes.size,
-    addAntinode: (antinode: Cell) => antinodes.add(JSON.stringify(antinode)),
+    antinodes: {
+      get size() {
+        return antinodes.size
+      },
+      add(antinode: Cell) {
+        // FIXME: Would be nice not to have to stringify the antinode. Custom equality function or something?
+        antinodes.add(JSON.stringify(antinode))
+      },
+    },
   }
 }
 
 export default {
   part1({ lines }) {
-    const { antennas, grid, addAntinode, antinodeCount } = prepare(lines)
+    const { antennas, grid, antinodes } = prepare(lines)
 
     for (const antennaType of antennas.values()) {
       for (const antennaA of antennaType) {
@@ -44,16 +51,16 @@ export default {
             y: antennaA.y - yDiff,
           }
           if (grid.contains(antinode)) {
-            addAntinode(antinode)
+            antinodes.add(antinode)
           }
         }
       }
     }
 
-    return antinodeCount()
+    return antinodes.size
   },
   part2({ lines }) {
-    const { antennas, grid, addAntinode, antinodeCount } = prepare(lines)
+    const { antennas, grid, antinodes } = prepare(lines)
 
     for (const antennaType of antennas.values()) {
       for (const antennaA of antennaType) {
@@ -62,7 +69,7 @@ export default {
             continue
           }
 
-          addAntinode(antennaA)
+          antinodes.add(antennaA)
 
           const xDiff = antennaB.x - antennaA.x
           const yDiff = antennaB.y - antennaA.y
@@ -72,7 +79,7 @@ export default {
           }
 
           while (grid.contains(antinode)) {
-            addAntinode(antinode)
+            antinodes.add(antinode)
             antinode.x -= xDiff
             antinode.y -= yDiff
           }
@@ -80,6 +87,6 @@ export default {
       }
     }
 
-    return antinodeCount()
+    return antinodes.size
   },
 } satisfies Day
