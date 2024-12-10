@@ -59,7 +59,8 @@ export default {
       blocks[index] = block
     }
 
-    return checksum(blocks)
+    // FIXME: This filter is only necessary due to a bug where one block is left at the end of the list :/
+    return checksum(blocks.filter((it) => typeof it === 'number'))
   },
   part2({ lines }) {
     const { blocks, files } = prepare(lines)
