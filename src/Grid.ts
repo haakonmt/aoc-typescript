@@ -1,4 +1,5 @@
-export type Cell<T extends Record<string, unknown>> = {
+// eslint-disable-next-line ts/no-empty-object-type
+export type Cell<T extends Record<string, unknown> = {}> = {
   x: number
   y: number
   char: string
