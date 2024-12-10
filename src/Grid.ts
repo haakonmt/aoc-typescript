@@ -1,4 +1,4 @@
-type Cell<T extends Record<string, unknown>> = {
+export type Cell<T extends Record<string, unknown>> = {
   x: number
   y: number
   char: string
@@ -26,5 +26,23 @@ export class Grid<T extends Record<string, unknown>> extends Array<Array<Cell<T>
 
   contains(cell: Pick<Cell<any>, 'x' | 'y'>) {
     return !!this[cell.y]?.[cell.x]
+  }
+
+  getSiblings(cell: Cell<T>, diagonal = false) {
+    const { x, y } = cell
+    const siblings = [
+      this[y]?.[x - 1],
+      this[y]?.[x + 1],
+      this[y - 1]?.[x],
+      this[y + 1]?.[x],
+    ]
+    return (diagonal
+      ? siblings.concat([
+        this[y - 1]?.[x - 1],
+        this[y - 1]?.[x + 1],
+        this[y + 1]?.[x - 1],
+        this[y + 1]?.[x + 1],
+      ])
+      : siblings).filter(Boolean)
   }
 }
